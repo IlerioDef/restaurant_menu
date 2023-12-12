@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # project apps
     'core.apps.CoreConfig', #Core app
+    'menu.apps.MenuConfig', #Menu app
 
 
     # default apps
