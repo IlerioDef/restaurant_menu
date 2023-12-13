@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+
+<h1>TEST!</h1>
+{% block content %}
+	
+{% if item_list %}
+    <ul>
+    {% for item in item_list %}
+        <li>{{ item }} ${{ item.price }}ITEM!</li>
+    {% endfor %}
+    </ul>
+    
+{% else %}
+    There is no items in the database.
+{% endif %}
+
+{% endblock %}
+
