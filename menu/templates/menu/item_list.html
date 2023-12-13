@@ -6,7 +6,9 @@
 {% if item_list %}
     <ul>
     {% for item in item_list %}
-        <li>{{ item }} ${{ item.price }}ITEM!</li>
+        <li>{{ item }} ${{ item.price }}ITEM!
+        <a href="{% url 'menu:item' item.id %}">CLICK</a>
+        </li>
     {% endfor %}
     </ul>
     
