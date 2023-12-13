@@ -8,5 +8,5 @@ app_name = 'menu'
 
 urlpatterns = [
     path('', views.ItemView.as_view(), name="all"),
-    # path('/<int:menu_id>/', views.menu, name='item'),
+    path('item/<int:pk>', views.ItemDetailView.as_view(), name='item'),
 ]
