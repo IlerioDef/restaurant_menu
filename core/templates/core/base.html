@@ -1,26 +1,44 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>at Ilerio Def's</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+{#    <script src="https://cdn.tailwindcss.com"></script>#}
+    <link href="{% static 'core/style.css' %}" rel="stylesheet">
 </head>
 <body>
-<div class="w-full p-2">
+<div class="w-full ">
 {#    NAVBAR START#}
-    <nav class="border-red-200 border-2 w-full flex ">
-        <div class="leftnav border-blue-400 border-2 w-1/2 box flex object-left">
-            <div class="flex border-yellow-500 border-2 w-auto text-2xl">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513m-3-4.87v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.38a48.474 48.474 0 00-6-.37c-2.032 0-4.034.125-6 .37m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.17c0 .62-.504 1.124-1.125 1.124H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M12.265 3.11a.375.375 0 11-.53 0L12 2.845l.265.265zm-3 0a.375.375 0 11-.53 0L9 2.845l.265.265zm6 0a.375.375 0 11-.53 0L15 2.845l.265.265z" />
-                </svg>
+   <nav class="bg-orange-300">
+            <div class="max-w-6xl mx-auto py-2 px-6 items-center flex justify-between xl:px-0">
+                <div class="menu-left flex-container items-center">
+                    <div class="inline-flex px-1 w-auto mx-auto items-center">
+                        <img src="" alt="" class="w-7 h-7 px-1 border-l-2 border-burgerGray rounded-full bg-burgerWhite text-burgerGray">
+                        <a href="#" class="py-2 px-2 text-lg text-burgerGray font-semibold hover:text-burgerWhite">At Ilerio Def's</a>
+                    </div>
+                </div>
+                    <ul class="flex items-center space-x-4 text-burgerGray">
+                        <li><a href="" class="text-burgerGray border-2
+                         border-white rounded-xl p-1 bg-burgerWhite hover:bg-burgerWhite-50">Menu</a></li>
+                        <li><a href="" class="text-burgerGray border-2 border-white rounded-xl p-1 bg-burgerWhite hover:bg-burgerWhite-50">Order</a></li>
+                        <li>
+                            <div class="flex bg-burgerWhite text-burgerGray rounded-xl p-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
+                                </svg>
+                                <a href="#" class="">{{ menu_order.get_order_quantity }}</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="menu-right flex items-center space-x-4">
+                    <a href="#">
+
+                    </a>
+                </div>
             </div>
-            <div class="flex border-yellow-500 border-2 w-auto">At Ilerio Def's</div>
-        </div>
-        <div class="rightnav flex border-green-400 border-2 w-1/2 float-right">
-            Right NAV
-        </div>
     </nav>
 {#    NAVBAR END#}
 </div>
@@ -32,21 +50,24 @@
 
 <!-- component -->
 
-<footer class="flex bg-blueGray-200 pt-8 pb-6 h-1/5">
-    <div class="flex w-full border-2 border-green-700 ">
-        <div class="leftfooter flex border-2 border-red-400 w-1/2"></div>
-        <div class="rightfooter flex border-2 border-purple-400 w-1/2">
-            <li>
-                <ul class="p-2">
-                    contact us
-                </ul>
-                <ul class="p-2">
-                    links
-                </ul>
-            </li>
-        </div>
-    </div>
-  
-</footer>
+<footer class="bg-burgerWhite">
+            <div class="max-w-6xl mx-auto py-10 px-6 xl:px-0 md:flex justify-between">
+                <div class="footer-left text-burgerGray mb-12 md:mb-0">
+                    <h2 class="mb-5 uppercase text-lg">About us</h2>
+                    <p class="">Ilerio Def's restaurant specializes in fusion kitchen</p>
+                </div>
+
+                <div class="footer-right text-burgerGray">
+                    <h2 class="mb-5 uppercase text-lg">Social links</h2>
+
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-burgerOrange hover:text-orange-800">Facebook</a></li>
+                        <li><a href="#" class="text-burgerOrange hover:text-orange-800">Twitter</a></li>
+                        <li><a href="#" class="text-burgerOrange hover:text-orange-800">Instagram</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </footer>
 </body>
 </html>
