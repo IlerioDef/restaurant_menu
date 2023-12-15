@@ -29,11 +29,16 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+CRISPY_ALLOWED_TEMPLATE_PACK = 'bootstrap5'
+
 
 INSTALLED_APPS = [
     # project apps
     'core.apps.CoreConfig', #Core app
     'menu.apps.MenuConfig', #Menu app
+    "crispy_forms",
+    "crispy_bootstrap5",
 
 
     # default apps

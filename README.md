@@ -8,4 +8,5 @@
 * Nothing has changed drastically from the first milestone.
 * So far, general model parameters are done. and could be seen on the image below
 ![current model diagram](milestones/media/models_milestone2.png)
-* The design will be done with TailwindCSS
+* T~~he design will be done with TailwindCSS~~
+* The design will be done with Bootstrap 5
