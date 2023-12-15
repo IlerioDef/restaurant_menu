@@ -10,3 +10,9 @@
 ![current model diagram](milestones/media/models_milestone2.png)
 * T~~he design will be done with TailwindCSS~~
 * The design will be done with Bootstrap 5
+
+## Milestone 3: User Interface 
+![current ui](milestones/media/ui_milestone3.png)
+* I've decided to switch from the TailwindCSS to Bootstrap5
+* So far the UI is simplistic and lacks detailed view (WIP)
+* Even though simplistic, it has both footer and header that are extended to the other HTML pages
