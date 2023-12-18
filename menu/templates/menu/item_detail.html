@@ -10,5 +10,6 @@
 {% if item.get_allergens %}
     <div class="">this item contains the following allergens: {{ item.get_allergens | join:"," }}</div>
     <div class="">Calories per item: {{ item.calories }} Ccal.</div>
+    <div>Price: ${{ item.price }}</div>
 {% endif %}
 {% endblock %}
