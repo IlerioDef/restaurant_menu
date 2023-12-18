@@ -13,6 +13,8 @@
 
 ## Milestone 3: User Interface 
 ![current ui](milestones/media/ui_milestone3.png)
+![current ui](milestones/media/ui_milestone3_2.png)
+
 * I've decided to switch from the TailwindCSS to Bootstrap5
-* So far the UI is simplistic and lacks detailed view (WIP)
+* So far the UI is simplistically crude and consists of two views, - menu and detailed info
 * Even though simplistic, it has both footer and header that are extended to the other HTML pages
