@@ -1,4 +1,3 @@
-import django.db.models
 from django.db import models
 
 
@@ -38,7 +37,7 @@ class Item(models.Model):
         ordering = ['category']
 
     def get_allergens(self):
-        allergens = Allergen.objects.filter(item__id = self.id)
+        allergens = Allergen.objects.filter(item__id=self.id)
         print(allergens)
         if allergens:
             return allergens
