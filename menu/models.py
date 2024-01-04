@@ -44,6 +44,13 @@ class Item(models.Model):
 
         return None
 
+    @property
+    def get_image_url(self):
+        if self.image:
+            return self.image.url
+        else:
+            return "https://placehold.co/600x400.png"
+
 
 class Chef(models.Model):
     name = models.CharField(max_length=50)

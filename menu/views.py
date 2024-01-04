@@ -3,9 +3,9 @@ from tkinter import Menu
 from django.db.models import Q
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 
-from menu.models import Item
+from menu.models import Item, Order
 
 
 # Create your views here.
@@ -28,3 +28,12 @@ class ItemListView(View):
 
 class ItemDetailView(DetailView):
     model = Item
+
+
+class OrderListView(ListView):
+    pass
+
+
+class OrderAddView(CreateView):
+    model = Order
+    fields = ['table', 'quantity', "price", "order_total", "assigned_to"]
