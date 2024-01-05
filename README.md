@@ -7,13 +7,13 @@
 ## Milestone 2: Revised Description
 * Nothing has changed drastically from the first milestone.
 * So far, general model parameters are done. and could be seen on the image below
-![current model diagram](milestones/media/models_milestone2.png)
+![current model diagram](milestones/media/db_structure_2.png)
 * T~~he design will be done with TailwindCSS~~
 * The design will be done with Bootstrap 5
 
 ## Milestone 3: User Interface 
-![current ui](milestones/media/ui_milestone3.png)
-![current ui](milestones/media/ui_milestone3_2.png)
+![current ui](milestones/media/Screenshot_2024_01_04.png)
+![current ui](milestones/media/Screenshot from 2024-01-04 21-28-05.png)
 
 * I've decided to switch from the TailwindCSS to Bootstrap5
 * So far the UI is simplistically crude and consists of two views, - menu and detailed info

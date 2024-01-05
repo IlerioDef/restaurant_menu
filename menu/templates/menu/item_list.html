@@ -9,10 +9,10 @@
     {% for item in item_list %}
     <div class="col-3 offset-1 container border-2">
     <div class="card border-secondary mb-3" style="max-width: 20rem;">
-      <div class="card-header">{{ item.category }}</div>
+      <div class="card-header text-uppercase">{{ item.category }}</div>
       <div class="card-body">
-          <div class="card-image">
-              <img src="{{ item.get_image_url }}" class="card-img-top">
+          <div class="h-50" >
+              <img src='{{ item.get_image_url }}' class="img-thumbnail card-img-top rounded-3 bg-body-secondary">
           </div>
         <h4 class="card-title">
         <a class ="link-opacity-50-hover icon-link" href="{% url "menu:item" pk=item.id %}">{{ item.name }}</a>

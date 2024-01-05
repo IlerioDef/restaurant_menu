@@ -34,8 +34,9 @@ class Item(models.Model):
         return f"{self.name}"
 
     class Meta:
-        ordering = ['category']
+        ordering = ['category',]
 
+    @property
     def get_allergens(self):
         allergens = Allergen.objects.filter(item__id=self.id)
         print(allergens)
@@ -63,6 +64,7 @@ class Table(models.Model):
     """
     Table Model, by default the number of tables is 13. You may change the number of tables manually
     """
+
     def get_table_names():
         table_choices = []
         for x in range(1, 14):
@@ -71,8 +73,8 @@ class Table(models.Model):
 
     def get_table_status():
         status_options = {
-            ("O","Open"),
-            ("C","Closed"),
+            ("O", "Open"),
+            ("C", "Closed"),
             ('R', "Reserved")
 
         }
@@ -85,6 +87,7 @@ class Table(models.Model):
 
     def __str__(self):
         return f"Table #{self.name}"
+
 
 class Order(models.Model):
     PENDING = "P"
@@ -100,24 +103,29 @@ class Order(models.Model):
         DONE: "Done",
         CANCELLED: "Cancelled",
     }
-    id = models.AutoField
-    table = models.CharField(
-        max_length=2,
-        choices=Table.get_table_names(),
-        default=PENDING
-    )
+    table = models.ForeignKey(Table, on_delete=models.CASCADE)
+    chef = models.ForeignKey(Chef, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)  # What exactly is under preparation
     quantity = models.IntegerField()  # How many items are under preparation
-    price = models.DecimalField(max_digits=10, decimal_places=2)  # How much does it cost. WARNING TODO! This should be
-    # immutable after the order is done.
-    order_total = models.DecimalField(max_digits=10, decimal_places=2)  # Total price of the order
     status = models.CharField(
         max_length=2,
         choices=ORDER_STATUS_CHOICES,
         default=PENDING
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    assigned_to = models.ForeignKey(Chef, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Order # {self.id}"
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity = models.IntegerField(db_default=0, null=True, blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+
+    @property
+    def get_total(self):
+        total = self.item.price * self.quantity
+        return total
