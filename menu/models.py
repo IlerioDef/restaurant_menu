@@ -34,7 +34,7 @@ class Item(models.Model):
         return f"{self.name}"
 
     class Meta:
-        ordering = ['category',]
+        ordering = ['category']
 
     @property
     def get_allergens(self):

@@ -20,7 +20,7 @@ class ItemListView(View):
             query.add(Q(description__icontains=strval), Q.OR)
             items = Item.objects.filter(query).select_related().distinct().order_by('category')
         else:
-            items = Item.objects.all().order_by()
+            items = Item.objects.all().order_by("category")
         ctx = {'item_list': items, "search": strval}
 
         return render(request, self.template_name, ctx)
