@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -31,7 +32,7 @@ class Item(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.name}"
+        return self.name
 
     class Meta:
         ordering = ['category']
@@ -39,9 +40,12 @@ class Item(models.Model):
     @property
     def get_allergens(self):
         allergens = Allergen.objects.filter(item__id=self.id)
-        print(allergens)
+        print("Allergens from get_allergens", allergens)
         if allergens:
-            return allergens
+            allergens_list = []
+            for allergen in allergens:
+                allergens_list.append(allergen.name)
+            return allergens_list
 
         return None
 
@@ -82,11 +86,12 @@ class Table(models.Model):
 
     name = models.CharField(max_length=10,
                             choices=get_table_names())
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     status = models.CharField(max_length=3,
                               choices=get_table_status())
 
     def __str__(self):
-        return f"Table #{self.name}"
+        return f"Table {self.name}, user: {self.user}, status: {self.status}"
 
 
 class Order(models.Model):
@@ -106,7 +111,6 @@ class Order(models.Model):
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
     chef = models.ForeignKey(Chef, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)  # What exactly is under preparation
-    quantity = models.IntegerField()  # How many items are under preparation
     status = models.CharField(
         max_length=2,
         choices=ORDER_STATUS_CHOICES,
@@ -117,13 +121,36 @@ class Order(models.Model):
     def __str__(self):
         return f"Order # {self.id}"
 
+    @property
+    def get_order_total(self):
+        order_items = self.orderitem_set.all()
+        total = sum([item.get_total for item in order_items])
+        return total
+
+    @property
+    def get_order_items(self):
+        order_items = self.orderitem_set.all()
+        total = sum([item.quantity for item in order_items])
+        return total
+
+    @property
+    def get_order_allergens(self):
+        order_items = self.orderitem_set.all()
+        total = []
+        for item in order_items:
+            total = total + item.item.get_allergens
+        total = list(set(total))
+        return total
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    quantity = models.IntegerField(db_default=0, null=True, blank=True)
+    quantity = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"Order Item {self.item} x {self.quantity}"
 
     @property
     def get_total(self):
