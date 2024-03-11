@@ -47,7 +47,7 @@ class OrderView(LoginRequiredMixin, ListView):
                       {"table": table, "orderitem_list": orderitem_list, "order": order})
 
 
-class OrderModifyView(View, LoginRequiredMixin):
+class OrderModifyView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         print("GET here it is!", request.get_host())
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse_lazy("menu:order")))
@@ -85,7 +85,7 @@ class OrderModifyView(View, LoginRequiredMixin):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse_lazy("menu:order")))
 
 
-class OrderCheckoutView(View, LoginRequiredMixin):
+class OrderCheckoutView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         table = Table.objects.get(user_id=request.user.id)
         order = Order.objects.get(table_id=table.id, status="P")
