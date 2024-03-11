@@ -1,12 +1,11 @@
-from django.urls import path, include
-from django.views.generic import TemplateView
-
-from menu.views import order
+from django.contrib.auth import admin
+from django.urls import path
 
 app_name = 'core'
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name='core/base.html'), name="index"),
+    path('admin/', admin.site.urls),  # Keep
+
 ]
 
 

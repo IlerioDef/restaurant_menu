@@ -6,7 +6,7 @@ from django.forms import ModelForm
 from menu.models import Order, OrderItem
 
 
-class OrderAddForm(ModelForm):
+class OrderAddForm(forms.Form):
     class Meta:
         model = OrderItem
         fields = ['name', 'quantity', 'price']

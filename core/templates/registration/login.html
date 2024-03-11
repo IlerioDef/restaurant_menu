@@ -8,8 +8,13 @@
 {% if user.is_authenticated %}
 <h1> You are logged as a {{ user }}</h1>
 <h2>
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    
 <input type="submit" class="btn btn-primary" value="Logout" />
-<input type="hidden" name="next" value="{{ "logout" }}" />
+<input type="hidden" name="next" value="{{ next }}" />
+    
+</form>
 
 </h2>
 {% endif %}

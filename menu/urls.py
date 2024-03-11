@@ -1,17 +1,16 @@
-from django.urls import path, include
-from django.views.generic import TemplateView
+from django.contrib.auth.views import LogoutView
+from django.urls import path
 
 from menu import views
-from menu.views import ItemListView
+from menu.views import ItemListView, OrderView, ItemDetailView, OrderModifyView, OrderCheckoutView
 
 app_name = 'menu'
 
 urlpatterns = [
-    path('', views.ItemListView.as_view(), name="all"),
-    path('item/<int:pk>', views.ItemDetailView.as_view(), name='item'),
-    path('order/', views.order, name='order'),
-    path('order/add/', views.order_add, name="order_add"),
-    path('order/update/', views.order_update, name="order_update"),
-    path('order/delete/', views.order_delete, name="order_delete"),
+    path('', ItemListView.as_view(), name="all"),
+    path('item/<int:pk>', ItemDetailView.as_view(), name='item'),
+    path('order/', OrderView.as_view(), name='order'),
+    path('item/<int:pk>/<str:action>', OrderModifyView.as_view(), name='order_modify'),
+    path('order/checkout', OrderCheckoutView.as_view(), name='order_checkout'),
 
 ]
