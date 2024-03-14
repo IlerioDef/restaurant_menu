@@ -13,10 +13,12 @@
                 <caption id="table-order-total">Order Total</caption>
             </tr>
             <tr>
-                
+                {% if order.get_order_total_amount %}
                 <th><h5>Items: <strong>{{order.get_order_total_items}} item(s)</strong></h5></th>
                     <br>
                 <th><h5>Total:<strong> ${{order.get_order_total_amount|floatformat:2}}</strong></h5></th>
+                {% else %}<th><h5>There are no items in your order</h5></th>
+                {% endif %}
                     <th>logged as: {{ user }}</th>
                    
                 <th> 
@@ -35,6 +37,7 @@
                 </th>
                 <th>
                     <br>
+                    {% if order.get_order_allergens %}
                     <div class="alert alert-dismissible alert-warning">
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         <div class="card">
@@ -46,6 +49,7 @@
                             </h5>
                         </div>
                     </div>
+                    {% endif %}
                 </th>
             </tr>
         </table>
