@@ -27,7 +27,7 @@ class ItemListView(View):
             items = Item.objects.all().order_by("category")
         ctx = {'item_list': items, "search": strval}
 
-        return render(request, self.template_name, ctx)
+        return render(request, template_name='menu/item_list.html', context=ctx)
 
 
 class ItemDetailView(DetailView):
