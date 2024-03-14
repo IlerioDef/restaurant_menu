@@ -1,9 +1,9 @@
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
-from django.http import HttpResponseRedirect, request, HttpResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView, DetailView
@@ -12,8 +12,6 @@ from menu.models import Item, OrderItem, Order, Table, Chef
 
 
 # Create your views here.
-
-
 class ItemListView(View):
     template_name = 'menu/item_list.html'
 
@@ -49,11 +47,9 @@ class OrderView(LoginRequiredMixin, ListView):
 
 class OrderModifyView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        print("GET here it is!", request.get_host())
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse_lazy("menu:order")))
 
     def post(self, request, *args, **kwargs):
-        print("YES< IT IS", args, kwargs)
         table = Table.objects.get(user_id=request.user.id)
         chef = Chef.objects.get(status="A")
         order, _ = Order.objects.get_or_create(table_id=table.id, status="P", chef_id=chef.id)
@@ -73,9 +69,7 @@ class OrderModifyView(LoginRequiredMixin, View):
                 item_in_order = order.orderitem_set.all().get(item__id=kwargs['pk'])
                 item_in_order.quantity -= 1
                 item_in_order.save()
-                print("This is the order", item_in_order)
                 if item_in_order.quantity == 0:
-                    print("yes, its =0", item_in_order.quantity)
                     item_in_order.delete()
                     order.save()
 

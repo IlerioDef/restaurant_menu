@@ -41,7 +41,6 @@ class Item(models.Model):
     @property
     def get_allergens(self):
         allergens = Allergen.objects.filter(item__id=self.id)
-        print("Allergens from get_allergens", allergens)
         if allergens:
             allergens_list = []
             for allergen in allergens:
