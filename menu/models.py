@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import F, Sum
 
+from restaurant_menu import settings
+
 
 # Create your models here.
 class Category(models.Model):
@@ -43,7 +45,7 @@ class Item(models.Model):
         if allergens:
             allergens_list = []
             for allergen in allergens:
-                allergens_list.append(allergen.name)
+                allergens_list.append(allergen.number)
             return allergens_list
 
         return None
@@ -86,21 +88,20 @@ class Table(models.Model):
         CLOSED: "Closed",
     }
 
-    @staticmethod
-    def get_table_names():
+    def get_table_numbers():
         table_choices = []
-        for x in range(1, 14):
+        for x in range(1, settings.NUMBER_OF_TABLES + 1):
             table_choices.append((f"{x}", f"Table #{x}"))
         return table_choices
 
-    name = models.CharField(max_length=10, choices=get_table_names())
+    number = models.CharField(max_length=10, choices=get_table_numbers())
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, null=True, blank=True
     )
     status = models.CharField(max_length=10, choices=TABLE_STATUS_CHOICES)
 
     def __str__(self):
-        return f"Table {self.name}, user: {self.user}, status: {self.status}"
+        return f"Table {self.number}, user: {self.user}, status: {self.status}"
 
 
 class Order(models.Model):
