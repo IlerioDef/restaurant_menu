@@ -4,14 +4,14 @@
 
 {% block content %}
 
-<h1>{{ item.name }}</h1>
-<h2>{{ item.description }}</h2>
-<div class="">
-    <img class="img-fluid" src="{{ item.get_image_url }}">
-</div>
-{% if item.get_allergens %}
-    <div class="">this item contains the following allergens: {{ item.get_allergens | join:"," }}</div>
-    <div class="">Calories per item: {{ item.calories }} Ccal.</div>
-    <div>Price: ${{ item.price }}</div>
-{% endif %}
+    <h1>{{ item.name }}</h1>
+    <h2>{{ item.description }}</h2>
+    <div class="">
+        <img class="img-fluid" src="{{ item.get_image_url }}">
+    </div>
+    {% if item.get_allergens %}
+        <div class="">this item contains the following allergens: {{ item.get_allergens | join:"," }}</div>
+        <div class="">Calories per item: {{ item.calories }} Ccal.</div>
+        <div>Price: ${{ item.price }}</div>
+    {% endif %}
 {% endblock %}

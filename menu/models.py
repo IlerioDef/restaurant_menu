@@ -52,8 +52,8 @@ class Item(models.Model):
     def get_image_url(self):
         if self.image:
             return self.image.url
-        else:
-            return "https://placehold.co/600x400.png"
+
+        return "https://placehold.co/600x400.png"
 
 
 class Chef(models.Model):
