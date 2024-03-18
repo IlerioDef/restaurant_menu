@@ -57,17 +57,16 @@ class Item(models.Model):
 
 
 class Chef(models.Model):
-    @staticmethod
-    def get_chef_status():
-        status_options = {
-            ("A", "Active"),
-            ("N", "Not working"),
-        }
-        return status_options
+    ON_DUTY = "ON DUTY"
+    OFF_DUTY = "OFF DUTY"
+    CHEF_STATUS_CHOICES = {
+        ON_DUTY: "On Duty",
+        OFF_DUTY: "Off Duty",
+    }
 
     name = models.CharField(max_length=50)
     status = models.CharField(
-        max_length=2, choices=get_chef_status(), default="N"
+        max_length=10, choices=CHEF_STATUS_CHOICES, default=ON_DUTY
     )
 
     def __str__(self):
