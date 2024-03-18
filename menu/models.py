@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Sum, F
+from django.db.models import F, Sum
 
 
 # Create your models here.
@@ -11,13 +11,12 @@ class Category(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['id']
-        verbose_name_plural = 'Categories'
+        ordering = ["id"]
+        verbose_name_plural = "Categories"
 
 
 class Allergen(models.Model):
     name = models.CharField(max_length=50)
-    description = models.TextField(blank=True)  # this item contains XXXX
 
     def __str__(self):
         return self.name
@@ -36,7 +35,7 @@ class Item(models.Model):
         return f"{self.name} - id: {self.id}"
 
     class Meta:
-        ordering = ['category']
+        ordering = ["category"]
 
     @property
     def get_allergens(self):
@@ -65,19 +64,20 @@ class Chef(models.Model):
             ("N", "Not working"),
         }
         return status_options
+
     name = models.CharField(max_length=50)
     status = models.CharField(
-        max_length=2,
-        choices=get_chef_status(),
-        default="N"
+        max_length=2, choices=get_chef_status(), default="N"
     )
+
     def __str__(self):
         return self.name
 
 
 class Table(models.Model):
     """
-    Table Model, by default the number of tables is 13. You may change the number of tables manually
+    Table Model, by default the number of tables is 13.
+    You may change the number of tables manually
     """
 
     @staticmethod
@@ -89,19 +89,14 @@ class Table(models.Model):
 
     @staticmethod
     def get_table_status():
-        status_options = {
-            ("O", "Open"),
-            ("C", "Closed"),
-            ('R', "Reserved")
-
-        }
+        status_options = {("O", "Open"), ("C", "Closed"), ("R", "Reserved")}
         return status_options
 
-    name = models.CharField(max_length=10,
-                            choices=get_table_names())
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    status = models.CharField(max_length=3,
-                              choices=get_table_status())
+    name = models.CharField(max_length=10, choices=get_table_names())
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, null=True, blank=True
+    )
+    status = models.CharField(max_length=3, choices=get_table_status())
 
     def __str__(self):
         return f"Table {self.name}, user: {self.user}, status: {self.status}"
@@ -123,11 +118,11 @@ class Order(models.Model):
     }
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
     chef = models.ForeignKey(Chef, on_delete=models.CASCADE)
-    items = models.ManyToManyField(Item, through="OrderItem", related_name="orders_items")
+    items = models.ManyToManyField(
+        Item, through="OrderItem", related_name="orders_items"
+    )
     status = models.CharField(
-        max_length=2,
-        choices=ORDER_STATUS_CHOICES,
-        default=PENDING
+        max_length=2, choices=ORDER_STATUS_CHOICES, default=PENDING
     )
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(null=True, blank=True)
@@ -136,12 +131,14 @@ class Order(models.Model):
         return f"Order # {self.id}"
 
     def get_order_total_amount(self):
-        total = self.orderitem_set.aggregate(order_total_amount=Sum(F("item__price") * F("quantity")))
-        return total['order_total_amount']
+        total = self.orderitem_set.aggregate(
+            order_total_amount=Sum(F("item__price") * F("quantity"))
+        )
+        return total["order_total_amount"]
 
     def get_order_total_items(self):
-        total = self.orderitem_set.aggregate(order_total_items=Sum('quantity'))
-        return total['order_total_items']
+        total = self.orderitem_set.aggregate(order_total_items=Sum("quantity"))
+        return total["order_total_items"]
 
     def get_order_allergens(self):
         order_items = self.orderitem_set.all()
@@ -150,10 +147,6 @@ class Order(models.Model):
             total = total + item.item.get_allergens
         total = list(set(total))
         return total
-
-
-
-
 
 
 class OrderItem(models.Model):
