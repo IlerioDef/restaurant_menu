@@ -79,6 +79,13 @@ class Table(models.Model):
     You may change the number of tables manually
     """
 
+    OPEN = "OPEN"
+    CLOSED = "CLOSED"
+    TABLE_STATUS_CHOICES = {
+        OPEN: "Open",
+        CLOSED: "Closed",
+    }
+
     @staticmethod
     def get_table_names():
         table_choices = []
@@ -86,16 +93,11 @@ class Table(models.Model):
             table_choices.append((f"{x}", f"Table #{x}"))
         return table_choices
 
-    @staticmethod
-    def get_table_status():
-        status_options = {("O", "Open"), ("C", "Closed"), ("R", "Reserved")}
-        return status_options
-
     name = models.CharField(max_length=10, choices=get_table_names())
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, null=True, blank=True
     )
-    status = models.CharField(max_length=3, choices=get_table_status())
+    status = models.CharField(max_length=10, choices=TABLE_STATUS_CHOICES)
 
     def __str__(self):
         return f"Table {self.name}, user: {self.user}, status: {self.status}"
