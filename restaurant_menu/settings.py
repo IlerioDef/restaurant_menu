@@ -35,8 +35,7 @@ CRISPY_ALLOWED_TEMPLATE_PACK = "bootstrap5"
 
 INSTALLED_APPS = [
     # project apps
-    "core.apps.CoreConfig",  # Core app
-    "menu.apps.MenuConfig",  # Menu app
+    "menu.apps.MenuConfig",
     "crispy_forms",
     "crispy_bootstrap5",
     # default apps
