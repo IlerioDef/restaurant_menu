@@ -39,7 +39,6 @@ class Item(models.Model):
     class Meta:
         ordering = ["category"]
 
-    @property
     def get_allergens(self):
         allergens = Allergen.objects.filter(item__id=self.id)
         if allergens:
@@ -50,7 +49,6 @@ class Item(models.Model):
 
         return None
 
-    @property
     def get_image_url(self):
         if self.image:
             return self.image.url
