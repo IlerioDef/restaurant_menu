@@ -105,11 +105,11 @@ class Table(models.Model):
 
 
 class Order(models.Model):
-    PENDING = "P"
-    ACCEPTED = "A"
-    PROCESSING = "PR"
-    DONE = "D"
-    CANCELLED = "C"
+    PENDING = "PENDING"
+    ACCEPTED = "ACCEPTED"
+    PROCESSING = "PROCESSING"
+    DONE = "DONE"
+    CANCELLED = "CANCELLED"
 
     ORDER_STATUS_CHOICES = {
         PENDING: "Pending",
@@ -124,10 +124,10 @@ class Order(models.Model):
         Item, through="OrderItem", related_name="orders_items"
     )
     status = models.CharField(
-        max_length=2, choices=ORDER_STATUS_CHOICES, default=PENDING
+        max_length=15, choices=ORDER_STATUS_CHOICES, default=PENDING
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(null=True, blank=True)
+    modified_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     def __str__(self):
         return f"Order # {self.id}"
