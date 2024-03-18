@@ -40,14 +40,7 @@ class Item(models.Model):
         ordering = ["category"]
 
     def get_allergens(self):
-        allergens = Allergen.objects.filter(item__id=self.id)
-        if allergens:
-            allergens_list = []
-            for allergen in allergens:
-                allergens_list.append(allergen.number)
-            return allergens_list
-
-        return None
+        return Item.objects.get(id=self.id).allergies.all()
 
     def get_image_url(self):
         if self.image:
@@ -116,8 +109,8 @@ class Order(models.Model):
         DONE: "Done",
         CANCELLED: "Cancelled",
     }
-    table = models.ForeignKey(Table, on_delete=models.CASCADE)
-    chef = models.ForeignKey(Chef, on_delete=models.CASCADE)
+    table = models.ForeignKey(Table, on_delete=models.SET_NULL)
+    chef = models.ForeignKey(Chef, on_delete=models.SET_NULL)
     items = models.ManyToManyField(
         Item, through="OrderItem", related_name="orders_items"
     )
