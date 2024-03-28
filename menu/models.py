@@ -28,7 +28,7 @@ class Item(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
     calories = models.IntegerField()
-    allergies = models.ManyToManyField(Allergen, blank=True)
+    allergens = models.ManyToManyField(Allergen, blank=True)
     image = models.ImageField(blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -40,7 +40,7 @@ class Item(models.Model):
         ordering = ["category"]
 
     def get_allergens(self):
-        return Item.objects.get(id=self.id).allergies.all()
+        return self.allergens.all()
 
     def get_image_url(self):
         if self.image:
@@ -66,6 +66,80 @@ class Chef(models.Model):
         return self.name
 
 
+class Order(models.Model):
+    PENDING = "PENDING"
+    ACCEPTED = "ACCEPTED"
+    PROCESSING = "PROCESSING"
+    DONE = "DONE"
+    CANCELLED = "CANCELLED"
+
+    ORDER_STATUS_CHOICES = {
+        PENDING: "Pending",
+        ACCEPTED: "Accepted",
+        PROCESSING: "Processing",
+        DONE: "Done",
+        CANCELLED: "Cancelled",
+    }
+    table = models.ForeignKey(
+        "Table", on_delete=models.SET_NULL, null=True, blank=True
+    )
+    chef = models.ForeignKey(
+        Chef, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    items = models.ManyToManyField(
+        Item, through="OrderItem", related_name="orders_items"
+    )
+    status = models.CharField(
+        max_length=15, choices=ORDER_STATUS_CHOICES, default=PENDING
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    def __str__(self):
+        return f"Order # {self.id}"
+
+    def get_order(self, table_id):
+        order, _ = Order.objects.get_or_create(
+            table_id=table_id, status="PENDING"
+        )
+
+    def get_total_amount(self):
+        total = self.orderitem_set.aggregate(
+            total_amount=Sum(F("item__price") * F("quantity"))
+        )
+        return total["total_amount"]
+
+    def get_total_items(self):
+        total = self.orderitem_set.aggregate(total_items=Sum("quantity"))
+        return total["total_items"]
+
+    def get_order_allergens(self):
+        return (
+            self.orderitem_set.prefetch_related("item__allergies")
+            .values_list("item__allergies__name", flat=True)
+            .distinct()
+        )
+
+    def get_items(self):
+        return self.orderitem_set.prefetch_related("item")
+
+    def add_item(self, item_id):
+        orderitem, created = self.orderitem_set.get_or_create(item_id=item_id)
+        if created:
+            return
+
+        orderitem.quantity = F("quantity") + 1
+        orderitem.save()
+
+    def remove_item(self, item_id):
+        orderitem = self.orderitem_set.get(item_id=item_id)
+        orderitem.quantity = F("quantity") - 1
+        orderitem.save()
+
+        if self.orderitem_set.get(item_id=item_id).quantity == 0:
+            orderitem.delete()
+
+
 class Table(models.Model):
     """
     Table Model, by default the number of tables is 13.
@@ -87,69 +161,29 @@ class Table(models.Model):
 
     number = models.CharField(max_length=10, choices=get_table_numbers())
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, null=True, blank=True
+        User, on_delete=models.SET_NULL, null=True, blank=True
     )
     status = models.CharField(max_length=10, choices=TABLE_STATUS_CHOICES)
 
     def __str__(self):
         return f"Table {self.number}, user: {self.user}, status: {self.status}"
 
+    def get_order(self):
+        order, _ = Order.objects.get_or_create(table_id=self.id)
 
-class Order(models.Model):
-    PENDING = "PENDING"
-    ACCEPTED = "ACCEPTED"
-    PROCESSING = "PROCESSING"
-    DONE = "DONE"
-    CANCELLED = "CANCELLED"
-
-    ORDER_STATUS_CHOICES = {
-        PENDING: "Pending",
-        ACCEPTED: "Accepted",
-        PROCESSING: "Processing",
-        DONE: "Done",
-        CANCELLED: "Cancelled",
-    }
-    table = models.ForeignKey(Table, on_delete=models.SET_NULL)
-    chef = models.ForeignKey(Chef, on_delete=models.SET_NULL)
-    items = models.ManyToManyField(
-        Item, through="OrderItem", related_name="orders_items"
-    )
-    status = models.CharField(
-        max_length=15, choices=ORDER_STATUS_CHOICES, default=PENDING
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True, null=True, blank=True)
-
-    def __str__(self):
-        return f"Order # {self.id}"
-
-    def get_order_total_amount(self):
-        total = self.orderitem_set.aggregate(
-            order_total_amount=Sum(F("item__price") * F("quantity"))
-        )
-        return total["order_total_amount"]
-
-    def get_order_total_items(self):
-        total = self.orderitem_set.aggregate(order_total_items=Sum("quantity"))
-        return total["order_total_items"]
-
-    def get_order_allergens(self):
-        order_items = self.orderitem_set.all()
-        total = []
-        for item in order_items:
-            total = total + item.item.get_allergens
-        total = list(set(total))
-        return total
+        return order
 
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=0, null=True, blank=True)
+    item = models.ForeignKey(
+        Item, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    quantity = models.PositiveIntegerField(default=1)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Order {self.order_id} Item {self.item} x {self.quantity} pcs."
 
-    def get_item_total(self):
+    def get_total_amount(self):
         return self.item.price * self.quantity

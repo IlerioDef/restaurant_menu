@@ -23,7 +23,7 @@
                         <div class="container row align-content-center">
                             <div class="col text-end">$ {{ item.price }}</div>
                             <div class="col text-end">
-                                <form action="{% url 'menu:order_modify' item.id 'add' %}" method="post">
+                                <form action="{% url 'menu:add_item' item.id %}" method="post">
                                     {% csrf_token %}
                                     {{form}}
                                     <button type="button submit" class="btn btn-outline-primary">

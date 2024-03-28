@@ -9,9 +9,11 @@
     <div class="">
         <img class="img-fluid" src="{{ item.get_image_url }}">
     </div>
-    {% if item.get_allergens %}
-        <div class="">this item contains the following allergens: {{ item.get_allergens | join:"," }}</div>
-        <div class="">Calories per item: {{ item.calories }} Ccal.</div>
-        <div>Price: ${{ item.price }}</div>
-    {% endif %}
+    {% with allergens=item.allergens.all %}
+        {% if allergens %}
+            <div class="">this item contains the following allergens: {{ allergens|join:", " }}</div>
+        {% endif %}
+    {% endwith %}
+    <div class="">Calories per item: {{ item.calories }} Ccal.</div>
+    <div>Price: ${{ item.price }}</div>
 {% endblock %}

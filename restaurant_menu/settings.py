@@ -35,6 +35,8 @@ CRISPY_ALLOWED_TEMPLATE_PACK = "bootstrap5"
 
 INSTALLED_APPS = [
     # project apps
+    "silk",
+    "django_extensions",
     "menu.apps.MenuConfig",
     "crispy_forms",
     "crispy_bootstrap5",
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "silk.middleware.SilkyMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",

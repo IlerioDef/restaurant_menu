@@ -13,17 +13,17 @@
                         <caption id="table-order-total">Order Total</caption>
                     </tr>
                     <tr>
-                        {% if order.get_order_total_amount %}
-                            <th><h5>Items: <strong>{{order.get_order_total_items}} item(s)</strong></h5></th>
+                        {% if order.get_total_amount %}
+                            <th><h5>Items: <strong>{{order.get_total_items }} item(s)</strong></h5></th>
                             <br>
-                            <th><h5>Total:<strong> ${{order.get_order_total_amount|floatformat:2}}</strong></h5></th>
+                            <th><h5>Total:<strong> ${{order.get_total_amount|floatformat:2}}</strong></h5></th>
                         {% else %}<th><h5>There are no items in your order</h5></th>
                         {% endif %}
                         <th>logged as: {{ user }}</th>
 
                         <th>
                             <br>
-                            {% if order.get_order_total_amount %}
+                            {% if order.get_total_amount %}
                                 <form action="{% url 'menu:order_checkout' %}" method="post">
                                     {% csrf_token %}
                                     {{ form }}
@@ -38,14 +38,14 @@
                         </th>
                         <th>
                             <br>
-                            {% if order.get_order_allergens %}
+                            {% if order.get_allergens %}
                                 <div class="alert alert-dismissible alert-warning">
                                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                                     <div class="card">
                                         <h5 class="">Please be advised that your order contains following allergens:</h5>
                                         <h5 class="mb-0 flex text-uppercase w-auto">
                                             <strong>
-                                                {{ order.get_order_allergens | join:", "}}
+                                                {{ order.get_allergens | join:", " }}
                                             </strong>
                                         </h5>
                                     </div>
@@ -74,7 +74,7 @@
                         <div style="flex:1"><p>${{item.item.price}}</p></div>
                         <div style="flex:1" class="inline">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <form action="{% url 'menu:order_modify' item.item.id 'remove' %}" method="post">
+                                <form action="{% url 'menu:remove_item' item.item.id %}" method="post">
                                     {% csrf_token %}
                                     {{ form }}
 
@@ -86,7 +86,7 @@
                                 </form>
 
                                 <button type="button" class="btn btn-secondary" disabled>{{ item.quantity }}</button>
-                                <form action="{% url 'menu:order_modify' item.item.id 'add' %}" method="post">
+                                <form action="{% url 'menu:add_item' item.item.id %}" method="post">
                                     {% csrf_token %}
                                     {{ form }}
 
@@ -100,7 +100,7 @@
                             </div>
 
                         </div>
-                        <div style="flex:1"><p>$ {{item.get_item_total}}</p></div>
+                        <div style="flex:1"><p>$ {{item.get_total_amount }}</p></div>
                     </div>
                 {% endfor %}
                 <br>
