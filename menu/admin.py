@@ -9,9 +9,9 @@ from menu.models import Allergen, Category, Chef, Item, Order, OrderItem, Table
 
 admin.site.register(Allergen)
 admin.site.register(Category)
+admin.site.register(Chef)
 admin.site.register(Item)
 admin.site.register(Order)
-admin.site.register(Chef)
 admin.site.register(OrderItem)
 admin.site.register(Table)
 

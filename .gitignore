@@ -7,6 +7,3 @@ node_modules/
 __pycache__/
 local_settings.py
 */migrations/
-
-
-/.flake8
