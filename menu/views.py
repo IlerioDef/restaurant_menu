@@ -30,7 +30,11 @@ class ItemListView(View):
             )
 
         else:
-            items = Item.objects.all().order_by("category")
+            items = (
+                Item.objects.all()
+                .select_related("category")
+                .order_by("category")
+            )
         ctx = {"item_list": items, "search": _search}
 
         return render(
@@ -49,7 +53,11 @@ class OrderView(LoginRequiredMixin, ListView):
         if not hasattr(request.user, "table"):
             return render(request, "menu/no_table.html")
 
-        order = Table.objects.get(id=request.user.table.id).get_order()
+        order = (
+            Table.objects.select_for_update("orders")
+            .get(id=request.user.table.id)
+            .get_order()
+        )
 
         orderitem_list = order.get_items()
 

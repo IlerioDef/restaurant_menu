@@ -99,8 +99,10 @@ class Order(models.Model):
         return f"Order # {self.id}"
 
     def get_order(self, table_id):
-        order, _ = Order.objects.get_or_create(
-            table_id=table_id, status="PENDING"
+        order, _ = (
+            Order.objects.select_related("table")
+            .prefetch_related("items")
+            .get_or_create(table_id=table_id, status="PENDING")
         )
 
     def get_total_amount(self):

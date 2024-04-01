@@ -33,14 +33,18 @@ ALLOWED_HOSTS = []
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 CRISPY_ALLOWED_TEMPLATE_PACK = "bootstrap5"
 
-INSTALLED_APPS = [
-    # project apps
+
+DEBUG_APPS = [
+    "debug_toolbar",
     "silk",
     "django_extensions",
+]
+PROJECT_APPS = [
     "menu.apps.MenuConfig",
     "crispy_forms",
     "crispy_bootstrap5",
-    # default apps
+]
+DEFAULT_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -48,9 +52,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+INSTALLED_APPS = DEBUG_APPS + PROJECT_APPS + DEFAULT_APPS
 
 MIDDLEWARE = [
     "silk.middleware.SilkyMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -123,7 +129,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "/static/"
+STATIC_URL = "static/"
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
@@ -138,3 +144,6 @@ LOGOUT_REDIRECT_URL = "/"
 LOGIN_REDIRECT_URL = "/"
 
 NUMBER_OF_TABLES = 14
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
