@@ -54,7 +54,7 @@ class OrderView(LoginRequiredMixin, ListView):
             return render(request, "menu/no_table.html")
 
         order = (
-            Table.objects.select_for_update("orders")
+            Table.objects.select_related("orders")
             .get(id=request.user.table.id)
             .get_order()
         )

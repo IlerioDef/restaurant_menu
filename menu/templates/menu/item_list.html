@@ -22,6 +22,14 @@
                     <div class="card-footer">
                         <div class="container row align-content-center">
                             <div class="col text-end">$ {{ item.price }}</div>
+                            {% with rating=item.get_average_rating %}
+                                {% if rating %}
+                            <div class="col-form-label">Rating: {{ rating }}</div>
+                                    {% else %}
+                            <div class="col-form-label">Be first to rate!</div>
+
+                            {% endif %}
+                            {% endwith %}
                             <div class="col text-end">
                                 <form action="{% url 'menu:add_item' item.id %}" method="post">
                                     {% csrf_token %}

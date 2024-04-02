@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import F, Sum
+from django.db.models import Avg, F, Sum
 
 from restaurant_menu import settings
 
@@ -47,6 +47,11 @@ class Item(models.Model):
             return self.image.url
 
         return "https://placehold.co/600x400.png"
+
+    def get_average_rating(self):
+        return self.orderitem_set.aggregate(avg_rating=Avg("rating"))[
+            "avg_rating"
+        ]
 
 
 class Chef(models.Model):
@@ -183,9 +188,22 @@ class OrderItem(models.Model):
     )
     quantity = models.PositiveIntegerField(default=1)
     date_added = models.DateTimeField(auto_now_add=True)
+    rating = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
 
     def __str__(self):
         return f"Order {self.order_id} Item {self.item} x {self.quantity} pcs."
 
     def get_total_amount(self):
         return self.item.price * self.quantity
+
+    class Meta:
+        unique_together = ("order", "item")
+
+    constraints = [
+        models.CheckConstraint(
+            check=models.Q(rating__lte=5), name="rating__lte_5"
+        ),
+        models.CheckConstraint(
+            check=models.Q(rating__gte=1), name="rating__gte_1"
+        ),
+    ]

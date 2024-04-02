@@ -38,19 +38,21 @@
                         </th>
                         <th>
                             <br>
-                            {% if order.get_allergens %}
+                        {% with allergens=order.get_allergens %}
+                            {% if allergens %}
                                 <div class="alert alert-dismissible alert-warning">
                                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                                     <div class="card">
                                         <h5 class="">Please be advised that your order contains following allergens:</h5>
                                         <h5 class="mb-0 flex text-uppercase w-auto">
                                             <strong>
-                                                {{ order.get_allergens | join:", " }}
+                                                {{ allergens|join:", " }}
                                             </strong>
                                         </h5>
                                     </div>
                                 </div>
                             {% endif %}
+                        {% endwith %}
                         </th>
                     </tr>
                 </table>
